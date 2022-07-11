@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en" dir="ltr">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <style media="screen">
+    .jumbotron {
+      margin-top: 0px;
+      margin-bottom: 0px;
+    }
+
+    .jumbotron h1 {
+      text-align: center;
+    }
+ 
+    .body {
+      margin-bottom: 0px;
+      background-image: url('{% static "image/homepage1.jpg" %}');
+      background-size: cover;
+      height: 46rem;
+      background-repeat: no-repeat;
+    }
+
+  </style>
+
+</head>
+
+<body>
+
+  {% include "conference/navbar.html" %}
+  <br><br>
+  <div class="jumbotron text-center" style="margin-bottom:0px;">
+    <h1 class="display-4">Hello, Candidate</h1>
+    <p class="lead">Welcome to Conference Management System</p>
+    <hr class="my-4">
+    <p>You can access various features after Login.</p>
+    <p class="lead">
+      <a class="btn btn-primary btn-lg" href="candidatesignup" role="button">Create Your Account</a>
+      <a class="btn btn-primary btn-lg" href="candidatelogin" role="button">Login</a>
+    </p>
+    <br><br><br>
+  </div>
+
+  {% include "conference/footer.html" %}
+</body>
+
+</html>

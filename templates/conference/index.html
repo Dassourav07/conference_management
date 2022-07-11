@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en" dir="ltr">
+
+<style>
+        .xyz{
+          margin-bottom: 0px;
+          background-image: url('{% static "image/homepage1.jpg" %}');
+          background-size: cover;
+          height: 46rem;
+          background-repeat: no-repeat;
+        }
+</style>
+<body>
+  {% include "conference/navbar.html" %}
+<br>
+<section id="section-jumbotron" style="margin-bottom: 0px;" class="jumbotron jumbotron-fluid d-flex justify-content-center align-items-center xyz">
+  <a style="color: #fcfbff;text-decoration: none; " href="/"><font face = "Gill" size ="6">Conference Management System</font><br /></a>  
+
+ 
+</section>
+
+
+
+  {% include "conference/footer.html" %}
+
+
+</body>
+
+</html>
