@@ -53,7 +53,7 @@
           <th>Delete</th>
         </tr>
       </thead>
-      {% for t in customers %}
+      {% for t in candidates %}
       <tr>
 
         <td> {{t.get_name}}</td>
@@ -61,8 +61,8 @@
         <td>{{t.mobile}}</td>
         <td>{{t.address}}</td>
         
-        <td><a class="btn btn-primary btn-xs" href="{% url 'update-customer' t.id  %}"><span class="glyphicon glyphicon-edit"></span></a></td>
-        <td><a class="btn btn-danger btn-xs" href="{% url 'delete-customer' t.id  %}"><span class="glyphicon glyphicon-trash"></span></a></td>
+        <td><a class="btn btn-primary btn-xs" href="{% url 'update-candidate' t.id  %}"><span class="glyphicon glyphicon-edit"></span></a></td>
+        <td><a class="btn btn-danger btn-xs" href="{% url 'delete-candidate' t.id  %}"><span class="glyphicon glyphicon-trash"></span></a></td>
       </tr>
       {% endfor %}
     </table>
