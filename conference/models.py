@@ -15,7 +15,7 @@ class Conference(models.Model):
     conference_name=models.CharField(max_length=200)
     Duration=models.PositiveIntegerField()
     venue=models.CharField(max_length=200)
-    Date=models.DateTimeField(auto_now_add=False,auto_now=False,blank=True)
+    Date= models.DateTimeField(auto_now_add=False,auto_now=False,blank=True)
     creation_date =models.DateField(auto_now=True)
     pdf = models.FileField(upload_to='paper/Candidate/', null=True,blank=True)
    
