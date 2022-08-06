@@ -5,12 +5,15 @@ from django.contrib.auth.models import Group
 from django.http import HttpResponseRedirect
 from django.contrib.auth.decorators import login_required,user_passes_test
 from django.conf import settings
-from datetime import date, timedelta
 from django.db.models import Q
 from django.core.mail import send_mail
 from django.contrib.auth.models import User
 from candidate import models as CMODEL
 from candidate import forms as CFORM
+from conference.function import handle_uploaded_file
+from django.contrib import messages
+from django.http import HttpResponse 
+
 
 def home_view(request):
     if request.user.is_authenticated:
@@ -40,13 +43,13 @@ def adminclick_view(request):
 def admin_dashboard_view(request):
     dict={
         'total_user':CMODEL.Candidate.objects.all().count(),
-        'total_policy':models.Policy.objects.all().count(),
+        'total_conference':models.Conference.objects.all().count(),
         'total_category':models.Category.objects.all().count(),
         'total_question':models.Question.objects.all().count(),
-        'total_policy_holder':models.PolicyRecord.objects.all().count(),
-        'approved_policy_holder':models.PolicyRecord.objects.all().filter(status='Approved').count(),
-        'disapproved_policy_holder':models.PolicyRecord.objects.all().filter(status='Disapproved').count(),
-        'waiting_policy_holder':models.PolicyRecord.objects.all().filter(status='Pending').count(),
+        'total_conference_holder':models.ConferenceRecord.objects.all().count(),
+        'approved_conference_holder':models.ConferenceRecord.objects.all().filter(status='Approved').count(),
+        'disapproved_conference_holder':models.ConferenceRecord.objects.all().filter(status='Disapproved').count(),
+        'waiting_conference_holder':models.ConferenceRecord.objects.all().filter(status='Pending').count(),
     }
     return render(request,'conference/admin_dashboard.html',context=dict)
 
@@ -134,92 +137,92 @@ def update_category_view(request,pk):
   
   
 
-def admin_policy_view(request):
-    return render(request,'conference/admin_policy.html')
+def admin_conference_view(request):
+    return render(request,'conference/admin_conference.html')
 
 
-def admin_add_policy_view(request):
-    policyForm=forms.PolicyForm() 
+def admin_add_conference_view(request):
+    conferenceForm=forms.ConferenceForm() 
     
     if request.method=='POST':
-        policyForm=forms.PolicyForm(request.POST)
-        if policyForm.is_valid():
+        conferenceForm=forms.ConferenceForm(request.POST)
+        if conferenceForm.is_valid():
             categoryid = request.POST.get('category')
             category = models.Category.objects.get(id=categoryid)
             
-            policy = policyForm.save(commit=False)
-            policy.category=category
-            policy.save()
-            return redirect('admin-view-policy')
-    return render(request,'conference/admin_add_policy.html',{'policyForm':policyForm})
+            conference = conferenceForm.save(commit=False)
+            conference.category=category
+            conference.save()
+            return redirect('admin-view-conference')
+    return render(request,'conference/admin_add_conference.html',{'conferenceForm':conferenceForm})
 
-def admin_view_policy_view(request):
-    policies = models.Policy.objects.all()
-    return render(request,'conference/admin_view_policy.html',{'policies':policies})
+def admin_view_conference_view(request):
+    conferences = models.Conference.objects.all()
+    return render(request,'conference/admin_view_conference.html',{'conferences':conferences})
 
 
 
-def admin_update_policy_view(request):
-    policies = models.Policy.objects.all()
-    return render(request,'conference/admin_update_policy.html',{'policies':policies})
+def admin_update_conference_view(request):
+    conferences = models.Conference.objects.all()
+    return render(request,'conference/admin_update_conference.html',{'conferences':conferences})
 
 @login_required(login_url='adminlogin')
-def update_policy_view(request,pk):
-    policy = models.Policy.objects.get(id=pk)
-    policyForm=forms.PolicyForm(instance=policy)
+def update_conference_view(request,pk):
+    conference = models.Conference.objects.get(id=pk)
+    conferenceForm=forms.ConferenceForm(instance=conference)
     
     if request.method=='POST':
-        policyForm=forms.PolicyForm(request.POST,instance=policy)
+        conferenceForm=forms.ConferenceForm(request.POST,instance=conference)
         
-        if policyForm.is_valid():
+        if conferenceForm.is_valid():
 
             categoryid = request.POST.get('category')
             category = models.Category.objects.get(id=categoryid)
             
-            policy = policyForm.save(commit=False)
-            policy.category=category
-            policy.save()
+            conference = conferenceForm.save(commit=False)
+            conference.category=category
+            conference.save()
            
-            return redirect('admin-update-policy')
-    return render(request,'conference/update_policy.html',{'policyForm':policyForm})
+            return redirect('admin-update-conference')
+    return render(request,'conference/update_conference.html',{'conferenceForm':conferenceForm})
   
   
-def admin_delete_policy_view(request):
-    policies = models.Policy.objects.all()
-    return render(request,'conference/admin_delete_policy.html',{'policies':policies})
+def admin_delete_conference_view(request):
+    conferences = models.Conference.objects.all()
+    return render(request,'conference/admin_delete_conference.html',{'conferences':conferences})
     
-def delete_policy_view(request,pk):
-    policy = models.Policy.objects.get(id=pk)
-    policy.delete()
-    return redirect('admin-delete-policy')
+def delete_conference_view(request,pk):
+    conference = models.Conference.objects.get(id=pk)
+    conference.delete()
+    return redirect('admin-delete-conference')
 
-def admin_view_policy_holder_view(request):
-    policyrecords = models.PolicyRecord.objects.all()
-    return render(request,'conference/admin_view_policy_holder.html',{'policyrecords':policyrecords})
+def admin_view_conference_holder_view(request):
+    conferencerecords = models.ConferenceRecord.objects.all()
+    return render(request,'conference/admin_view_conference_holder.html',{'conferencerecords':conferencerecords})
 
-def admin_view_approved_policy_holder_view(request):
-    policyrecords = models.PolicyRecord.objects.all().filter(status='Approved')
-    return render(request,'conference/admin_view_approved_policy_holder.html',{'policyrecords':policyrecords})
+def admin_view_approved_conference_holder_view(request):
+    conferencerecords = models.ConferenceRecord.objects.all().filter(status='Approved')
+    return render(request,'conference/admin_view_approved_conference_holder.html',{'conferencerecords':conferencerecords})
 
-def admin_view_disapproved_policy_holder_view(request):
-    policyrecords = models.PolicyRecord.objects.all().filter(status='Disapproved')
-    return render(request,'conference/admin_view_disapproved_policy_holder.html',{'policyrecords':policyrecords})
+def admin_view_disapproved_conference_holder_view(request):
+    conferencerecords = models.ConferenceRecord.objects.all().filter(status='Disapproved')
+    return render(request,'conference/admin_view_disapproved_conference_holder.html',{'conferencerecords':conferencerecords})
 
-def admin_view_waiting_policy_holder_view(request):
-    policyrecords = models.PolicyRecord.objects.all().filter(status='Pending')
-    return render(request,'conference/admin_view_waiting_policy_holder.html',{'policyrecords':policyrecords})
+def admin_view_waiting_conference_holder_view(request):
+    conferencerecords = models.ConferenceRecord.objects.all().filter(status='Pending')
+    return render(request,'conference/admin_view_waiting_conference_holder.html',{'conferencerecords':conferencerecords})
 
 def approve_request_view(request,pk):
-    policyrecords = models.PolicyRecord.objects.get(id=pk)
-    policyrecords.status='Approved'
-    policyrecords.save()
-    return redirect('admin-view-policy-holder')
+    conferencerecords = models.ConferenceRecord.objects.get(id=pk)
+    conferencerecords.status='Approved'
+    conferencerecords.save()
+    return redirect('admin-view-conference-holder')
 
 def disapprove_request_view(request,pk):
-    policyrecords = models.PolicyRecord.objects.get(id=pk)
-    policyrecords.status='Disapproved'
-    policyrecords.save()
-    return redirect('admin-view-policy-holder')
+    conferencerecords = models.ConferenceRecord.objects.get(id=pk)
+    conferencerecords.status='Disapproved'
+    conferencerecords.save()
+    return redirect('admin-view-conference-holder')
 
 
 def admin_question_view(request):
@@ -265,4 +268,20 @@ def contactus_view(request):
             send_mail(str(name)+' || '+str(email),message,settings.EMAIL_HOST_USER, settings.EMAIL_RECEIVING_USER, fail_silently = False)
             return render(request, 'conference/contactussuccess.html')
     return render(request, 'conference/contactus.html', {'form':sub})
+
+
+def uploadForm(request):
+    	return render(request, 'conference/contactus.html')
+
+
+def add_pdf(request):
+    if request.method == 'POST':
+        file = request.FILES['pdf']  
+        file.save() 
+        handle_uploaded_file(request.FILES['file'])  
+        return HttpResponse("File uploaded successfuly")  
+    else:
+        messages.error(request, 'Files was not Submitted successfully')
+        return redirect('apply-conference')
+
 

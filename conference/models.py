@@ -1,29 +1,34 @@
+from threading import active_count
 from django.db import models
-from django.contrib.auth.models import User
 from candidate.models import Candidate
+ 
+
+ 
 class Category(models.Model):
-    category_name =models.CharField(max_length=20)
+    category_name =models.CharField(max_length=200)
     creation_date =models.DateField(auto_now=True)
     def __str__(self):
         return self.category_name
 
-class Policy(models.Model):
+class Conference(models.Model):
     category= models.ForeignKey('Category', on_delete=models.CASCADE)
-    policy_name=models.CharField(max_length=200)
-    sum_assurance=models.PositiveIntegerField()
-    premium=models.PositiveIntegerField()
-    tenure=models.PositiveIntegerField()
+    conference_name=models.CharField(max_length=200)
+    Duration=models.PositiveIntegerField()
+    venue=models.CharField(max_length=200)
+    Date=models.DateTimeField(auto_now_add=False,auto_now=False,blank=True)
     creation_date =models.DateField(auto_now=True)
+    pdf = models.FileField(upload_to='paper/Candidate/', null=True,blank=True)
+   
     def __str__(self):
-        return self.policy_name
-
-class PolicyRecord(models.Model):
+        return self.conference_name
+ 
+class ConferenceRecord(models.Model):
     candidate= models.ForeignKey(Candidate, on_delete=models.CASCADE)
-    Policy= models.ForeignKey(Policy, on_delete=models.CASCADE)
+    conference= models.ForeignKey(Conference, on_delete=models.CASCADE)
     status = models.CharField(max_length=100,default='Pending')
     creation_date =models.DateField(auto_now=True)
     def __str__(self):
-        return self.policy
+        return self.conference
 
 class Question(models.Model):
     candidate= models.ForeignKey(Candidate, on_delete=models.CASCADE)
