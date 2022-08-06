@@ -16,7 +16,7 @@
     {% include "conference/navbar.html" %}
  
 
-
+ 
 <br><br><br>
 <h3 style="text-align: center;color: rgb(31, 5, 90);">CANDIDATE SIGNUP</h3>
 <form method="POST" autocomplete="off" enctype="multipart/form-data">
@@ -57,11 +57,9 @@
       <div class="form-row">
         <div class="form-group col-md-12">
           <label for="profile_pic">Profile Picture</label>
-          {% render_field candidateForm.profile_pic|attr:'required:true' class="form-control" placeholder="" %}
+          {% render_field customerForm.profile_pic|attr:'required:true' class="form-control" placeholder="" %}
         </div>
-        
       </div>
-
 
     <button type="submit" class="btn btn-primary">Sign Up</button>
   </form>

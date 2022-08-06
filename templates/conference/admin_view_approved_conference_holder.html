@@ -1,4 +1,4 @@
-{% extends 'candidate/candidatebase.html' %}
+{% extends 'conference/adminbase.html' %}
 {% block content %}
 {%load static%}
 
@@ -19,43 +19,31 @@
     .row {
       margin: 100px;
     }
-
-       label #sidebar_btn {
-      z-index: 1;
-      color: #fff;
-      position: fixed;
-      cursor: pointer;
-      left: 300px;
-      padding-left: 60px;
-      margin-top:15px;
-      font-size: 20px;
-      
-      transition: 0.5s;
-      transition-property: color;
-    }
   </style>
 </head>
 <br><br>
 <div class="container">
   <div class="panel panel-primary">
     <div class="panel-heading">
-      <h6 class="panel-title">History</h6>
+      <h6 class="panel-title">Conference Holder Record</h6>
     </div>
     <table class="table table-hover" id="dev-table">
       <thead>
         <tr>
         <th>Serial No.</th>
           <th>Conference Name</th>
-
+          <th>Candidate Name</th>
           <th> Applied Date</th>
-          <th> Status</th>
+          <th>Status</th>
           
         </tr>
       </thead>
-      {% for t in conferences %}
+      {% for t in conferencerecords %}
       <tr>
         <td> {{ forloop.counter }}</td>
         <td> {{t.conference}}</td>
+        <td> {{t.candidate}}</td>
+        
         <td>{{t.creation_date}}</td>
         <td>{{t.status}}</td>
       </tr>

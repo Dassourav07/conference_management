@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 {% load static %}
 <html lang="en" dir="ltr">
+  <!-- Add icon library -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
 <head>
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -15,9 +17,7 @@
   {% include "conference/navbar.html" %}
   <br><br>
 
-  <center>
-    <h3 class='alert alert-success'>Send Us Your Valuable Feedback !</h3>
-
+  <center>    
     <form method="POST" autocomplete="off">
       <!-- Very Important csrf Token -->
       {% csrf_token %}
@@ -29,7 +29,39 @@
         <input type="submit" value="Send Message" class='btn btn-primary btn-lg'>
       </div>
     </form>
-  </center>
+    <h3 class='alert alert-success'>Send Us Your Valuable Feedback !</h3>
+    <h5> Thank You For Your Visit!</h5>
+    <div className="socials">
+      <a
+        href="https://in.linkedin.com/in/sourav-das-073384230?trk=public_profile_browsemap"
+        class="fa fa-linkedin"
+        rel="noreferrer"
+      >
+      </a>
+      <a
+        href="https://www.instagram.com/sourav--das//"
+        class="fa fa-instagram"
+        rel="noreferrer"
+      >
+        
+      </a>
+      <a
+        href="https://api.whatsapp.com/send?phone=918967969758"
+        class=" fa fa-whatsapp"
+        rel="noreferrer"
+      >
+         
+      </a>
+      <a href="https://github.com/Dassourav07"  
+       class ="fa fa-github"
+       rel="noreferrer">
+         
+      </a>
+    </div>
+    <div className="spacer">
+      <p></p>
+    </div>
+</center>
 
   {% include "conference/footer.html" %}
 </body>

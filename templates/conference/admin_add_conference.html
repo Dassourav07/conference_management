@@ -17,17 +17,31 @@
     
   </style>
 </head>
-<h2 style="text-align:center; color:rgb(28, 225, 189);">ADD CATEGORY</h2>
+<h2 style="text-align:center; color:blue;">ADD CONFERENCE</h2>
 <form method="POST" autocomplete="off" style="margin:100px;margin-top: 0px;">
     {%csrf_token%}
     <div class="form-group">
-      <label for="course_name">Category Name</label>
-      {% render_field categoryForm.category_name class="form-control" placeholder="Web Development" %}
+      <label for="course_name">Category</label>
+      {% render_field conferenceForm.category class="form-control" placeholder="Web Development" %}
+
+      <label for="course_name">Conference Name</label>
+      {% render_field conferenceForm.conference_name class="form-control" placeholder="Final Bootcamp" %}
+
+      <label for="course_name">Duration(Hour)</label>
+      {% render_field conferenceForm.Duration class="form-control" placeholder="3" %}
+
+      <label for="course_name">Venue</label>
+      {% render_field conferenceForm.venue class="form-control" placeholder="New Delhi" %}
+
+      <label for="course_name">Date</label>
+      {% render_field conferenceForm.Date class="form-control" placeholder="mm/dd/yyyy 23:59:59" %}
+
 
     </div>
+    
     
 <br>
     <button type="submit" class="btn btn-primary">ADD</button>
   </form>
-<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+<br><br><br><br>
 {% endblock content %}

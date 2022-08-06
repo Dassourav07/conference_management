@@ -178,14 +178,14 @@
   <div class="sidebar" style="margin-top:60px;">
     <center>
 
-      <img src="{% static candidate.profile_pic.url %}" class="profile_image" alt="">
+      <img src="{%static candidate.profile_pic.url %}" class="profile_image" alt="">
       <h4>{{request.user.first_name}}</h4>
       <h6 style="color: rgb(255, 255, 255);">( candidate )</h6>
 
     </center>
 
     <a href="/candidate/candidate-dashboard"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a>
-    <a href="/candidate/apply-policy"><i class="fab fa-product-hunt"></i><span>Apply Policy</span></a>
+    <a href="/candidate/apply-conference"><i class="fab fa-product-hunt"></i><span>Apply Conference</span></a>
     <a href="/candidate/history"><i class="fas fa-history"></i><span>History</span></a>
 
     <a href="/candidate/ask-question"><i class="fas fa-question-circle"></i><span>Ask Question</span></a>
