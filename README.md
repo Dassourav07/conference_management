@@ -36,7 +36,7 @@ see Conference ,
 
 delete Conference ,
 
-search Conference by studentid
+ 
 
 filter Conference based on :
 ## How To Setup On Windows
@@ -48,5 +48,7 @@ filter Conference based on :
 6. Migrate Database `python manage.py migrate`
 7. Create Super User `python manage.py createsuperuser`
 8. Finally Run The Project `python manage.py runserver`
-
  
+
+
+    
