@@ -1,17 +1,23 @@
 from django.shortcuts import render,redirect,reverse
+from django.core.files.storage import FileSystemStorage
+import conference
 from . import forms,models
-from django.db.models import Sum
 from django.contrib.auth.models import Group
 from django.http import HttpResponseRedirect
 from django.contrib.auth.decorators import login_required,user_passes_test
-from django.conf import settings
-from datetime import date, timedelta
-from django.db.models import Q
 from django.core.mail import send_mail
 from conference import models as CMODEL
 from conference import forms as CFORM
+from django.views import generic
+from django.contrib import messages
 from django.contrib.auth.models import User
+from django.http import HttpResponse 
+from candidate.forms import candidateForm
+from candidate.function import handle_uploaded_file
 
+ 
+
+ 
 
 def candidateclick_view(request):
     if request.user.is_authenticated:
@@ -45,32 +51,35 @@ def is_candidate(user):
 def candidate_dashboard_view(request):
     dict={
         'candidate':models.Candidate.objects.get(user_id=request.user.id),
-        'available_policy':CMODEL.Policy.objects.all().count(),
-        'applied_policy':CMODEL.PolicyRecord.objects.all().filter(candidate=models.Candidate.objects.get(user_id=request.user.id)).count(),
+        'available_conference':CMODEL.Conference.objects.all().count(),
+        'applied_conference':CMODEL.ConferenceRecord.objects.all().filter(candidate=models.Candidate.objects.get(user_id=request.user.id)).count(),
         'total_category':CMODEL.Category.objects.all().count(),
         'total_question':CMODEL.Question.objects.all().filter(candidate=models.Candidate.objects.get(user_id=request.user.id)).count(),
     
-    }
+    } 
     return render(request,'candidate/candidate_dashboard.html',context=dict)
 
-def apply_policy_view(request):
+def apply_conference_view(request):
     candidate = models.Candidate.objects.get(user_id=request.user.id)
-    policies = CMODEL.Policy.objects.all()
-    return render(request,'candidate/apply_policy.html',{'policies':policies,'candidate':candidate})
+    conferences = CMODEL.Conference.objects.all()
+    return render(request,'candidate/apply_conference.html',{'conferences':conferences,'candidate':candidate})
 
 def apply_view(request,pk):
     candidate = models.Candidate.objects.get(user_id=request.user.id)
-    policy = CMODEL.Policy.objects.get(id=pk)
-    policyrecord = CMODEL.PolicyRecord()
-    policyrecord.Policy = policy
-    policyrecord.candidate = candidate
-    policyrecord.save()
+    conference = CMODEL.Conference.objects.get(id=pk)
+    conferencerecord = CMODEL.ConferenceRecord()
+    conferencerecord.conference = conference
+    conferencerecord.candidate = candidate
+    conferencerecord.save()
     return redirect('history')
 
 def history_view(request):
     candidate = models.Candidate.objects.get(user_id=request.user.id)
-    policies = CMODEL.PolicyRecord.objects.all().filter(candidate=candidate)
-    return render(request,'candidate/history.html',{'policies':policies,'candidate':candidate})
+    conferences = CMODEL.ConferenceRecord.objects.all().filter(candidate=candidate)
+    return render(request,'candidate/history.html',{'conferences':conferences,'candidate':candidate})
+
+def candidate_category_view(request):
+    return render(request,'candidate/apply_conference.html')
 
 def ask_question_view(request):
     candidate = models.Candidate.objects.get(user_id=request.user.id)
@@ -91,3 +100,24 @@ def question_history_view(request):
     questions = CMODEL.Question.objects.all().filter(candidate=candidate)
     return render(request,'candidate/question_history.html',{'questions':questions,'candidate':candidate})
 
+
+@login_required
+def paperUpload(request):
+    if request.method == 'POST':
+        file = request.FILES['pdf']  
+        file.save() 
+        handle_uploaded_file(request.FILES['file'])  
+        return HttpResponse("File uploaded successfuly")  
+    else:
+        messages.error(request, 'Files was not Submitted successfully')
+        return redirect('apply-conference')
+
+def add_pdf(request):
+    if request.method == 'POST':
+        file = request.FILES['pdf']  
+        file.save() 
+        handle_uploaded_file(request.FILES['file'])  
+        return HttpResponse("File uploaded successfuly")  
+    else:
+        messages.error(request, 'Files was not Submitted successfully')
+        return redirect('apply-conference')
